@@ -1,0 +1,261 @@
+[
+    {
+        "id": "413ad9e4872c6969",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f794abdf3854c31f",
+        "type": "mqtt in",
+        "z": "413ad9e4872c6969",
+        "name": "",
+        "topic": "/ThinkIOT/values",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c57be57f72d891b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 480,
+        "y": 260,
+        "wires": [
+            [
+                "4b136c0be5c15b2f",
+                "fd63dca5bae754e0"
+            ]
+        ]
+    },
+    {
+        "id": "4b136c0be5c15b2f",
+        "type": "function",
+        "z": "413ad9e4872c6969",
+        "name": "function 5",
+        "func": "const temperatura = msg.payload.temp\n\nglobal.set(\"temp\", temperatura)\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 260,
+        "wires": [
+            [
+                "e22f897d429f16f7"
+            ]
+        ]
+    },
+    {
+        "id": "e22f897d429f16f7",
+        "type": "debug",
+        "z": "413ad9e4872c6969",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "fd63dca5bae754e0",
+        "type": "trigger",
+        "z": "413ad9e4872c6969",
+        "name": "",
+        "op1": "",
+        "op2": "{\"type\":\"message\",\"chatId\":\"6983832385\",\"content\":\"Bem vindo ao menu do SmartWear! Confira nossas opções: \"}",
+        "op1type": "nul",
+        "op2type": "json",
+        "duration": "1",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "min",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 710,
+        "y": 340,
+        "wires": [
+            [
+                "92466c8e4e52884d"
+            ]
+        ]
+    },
+    {
+        "id": "92466c8e4e52884d",
+        "type": "telegram sender",
+        "z": "413ad9e4872c6969",
+        "name": "",
+        "bot": "93936bc57b5fad36",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 930,
+        "y": 340,
+        "wires": [
+            [
+                "2027ae1c7683ff9d"
+            ]
+        ]
+    },
+    {
+        "id": "2027ae1c7683ff9d",
+        "type": "function",
+        "z": "413ad9e4872c6969",
+        "name": "function 6",
+        "func": "var opts = {\n    reply_markup: JSON.stringify({\n        \"inline_keyboard\": [[\n            {\n                \"text\": \"Verificar temperatura\",\n                \"callback_data\": \"1\"\n            },\n            {\n                \"text\": \"Verificar os batimentos cardíacos\",\n                \"callback_data\": \"2\"\n            },\n            {\n                \"text\": \"Como está minha saúde?\",\n                \"callback_data\": \"3\"\n            }\n        ]]\n    })\n}\n\nmsg.error = false\nmsg.payload.content = 'Escolha uma opção:'\nmsg.payload.options = opts\nmsg.payload.chatId = \"6983832385\"\nmsg.payload.type = \"message\"\n\nreturn [msg]",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1140,
+        "y": 340,
+        "wires": [
+            [
+                "8038c004acb6fd01"
+            ]
+        ]
+    },
+    {
+        "id": "8038c004acb6fd01",
+        "type": "telegram sender",
+        "z": "413ad9e4872c6969",
+        "name": "",
+        "bot": "93936bc57b5fad36",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1350,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "89f517983d4fe5e2",
+        "type": "telegram event",
+        "z": "413ad9e4872c6969",
+        "name": "",
+        "bot": "93936bc57b5fad36",
+        "event": "callback_query",
+        "autoanswer": false,
+        "x": 500,
+        "y": 400,
+        "wires": [
+            [
+                "e13bc034fdb188bf"
+            ]
+        ]
+    },
+    {
+        "id": "e13bc034fdb188bf",
+        "type": "function",
+        "z": "413ad9e4872c6969",
+        "name": "function 7",
+        "func": "msg.callback = msg.payload\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 400,
+        "wires": [
+            [
+                "806c1420873fc01c"
+            ]
+        ]
+    },
+    {
+        "id": "806c1420873fc01c",
+        "type": "function",
+        "z": "413ad9e4872c6969",
+        "name": "function 8",
+        "func": "let numeroAleatorio = Math.floor(Math.random() * 110) + 50\nlet saudes = [\"Forte\", \"Fraca\", \"Próximo de uma parada\", \"Febril\"]\nlet numeroAleatorioSaude = Math.floor(Math.random() * saudes.length)\n\nif (msg.callback.content == 1) {\n    let temperaturaPessoa = global.get(\"temp\")\n    if(temperaturaPessoa < 35) {\n        msg.payload.content = `Você está com uma temperatura de ${temperaturaPessoa}. Você está com Hipotermia!`\n    } else if(temperaturaPessoa > 36 && temperaturaPessoa < 37.5) {\n        msg.payload.content = `Você está com uma temperatura de ${temperaturaPessoa}. Você está Normal!`\n    } else if(temperaturaPessoa > 37.5 && temperaturaPessoa < 39.5) {\n        msg.payload.content = `Você está com uma temperatura de ${temperaturaPessoa}. Você está com Febre!`\n    } else if(temperaturaPessoa > 39.5 && temperaturaPessoa < 41) {\n        msg.payload.content = `Você está com uma temperatura de ${temperaturaPessoa}. Você está com Febre Alta!`\n    } else {\n        msg.payload.content = `Você está com uma temperatura de ${temperaturaPessoa}. Você está com Hipertermia!`\n    }\n}\nif (msg.callback.content == 2) {\n    if(numeroAleatorio < 60) {\n        msg.payload.content = `Você está com ${numeroAleatorio}. Batimento Fraco!`\n    } else if(numeroAleatorio > 60 && numeroAleatorio < 100) {\n        msg.payload.content = `Você está com ${numeroAleatorio}. Batimento Normal`\n    } else {\n        msg.payload.content = `Você está com ${numeroAleatorio}. Batimento Alto`\n    }\n}\nif (msg.callback.content == 3) {\n    msg.payload.content = `Você está com a saúde ${saudes[numeroAleatorioSaude]}`\n}\n\nmsg.payload.type = \"message\"\nmsg.payload.chatId = \"6983832385\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 400,
+        "wires": [
+            [
+                "4f2bb14343bda0d7"
+            ]
+        ]
+    },
+    {
+        "id": "4f2bb14343bda0d7",
+        "type": "telegram sender",
+        "z": "413ad9e4872c6969",
+        "name": "",
+        "bot": "93936bc57b5fad36",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1070,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2c57be57f72d891b",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "93936bc57b5fad36",
+        "type": "telegram bot",
+        "botname": "smartwearglobalbot",
+        "usernames": "itzleorainha",
+        "chatids": "6983832385",
+        "baseapiurl": "",
+        "updatemode": "polling",
+        "pollinterval": "300",
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": "6667",
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbotport": "8443",
+        "publicbotport": "8443",
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    }
+]
